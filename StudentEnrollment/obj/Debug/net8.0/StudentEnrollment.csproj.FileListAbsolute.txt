@@ -139,3 +139,4 @@ C:\Users\User\source\repos\StudentEnrollment\StudentEnrollment\obj\Debug\net8.0\
 C:\Users\User\source\repos\StudentEnrollment\StudentEnrollment\obj\Debug\net8.0\StudentEnrollment.pdb
 C:\Users\User\source\repos\StudentEnrollment\StudentEnrollment\obj\Debug\net8.0\StudentEnrollment.genruntimeconfig.cache
 C:\Users\User\source\repos\StudentEnrollment\StudentEnrollment\obj\Debug\net8.0\ref\StudentEnrollment.dll
+C:\Users\User\source\repos\StudentEnrollment\StudentEnrollment\obj\Debug\net8.0\StudentEnrollment.sourcelink.json

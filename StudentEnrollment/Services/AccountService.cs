@@ -72,6 +72,7 @@ namespace StudentEnrollment.Services
             var getUserRole = await userManager.GetRolesAsync(getUser);
             var userSession = new UserSession(getUser.Id, getUser.FirstName, getUser.Email, getUserRole.First());
             string token = GenerateToken(userSession);
+            
             return new LoginResponse(true, token!, "Login completed");
         }
 
@@ -94,6 +95,58 @@ namespace StudentEnrollment.Services
                 signingCredentials: credentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<GeneralResponse> ChangePassword(UserModelDTO userModelDTO, string newPassword)
+        {
+            if (userModelDTO == null || string.IsNullOrWhiteSpace(newPassword))
+            {
+                return new GeneralResponse(false, "Invalid input parameters");
+            }
+
+            var user = await userManager.FindByEmailAsync(userModelDTO.Email);
+
+            if (user == null)
+            {
+                return new GeneralResponse(false, "User not found");
+            }
+
+            // Use userManager.ChangePasswordAsync to change the password
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, userModelDTO.Password, newPassword);
+
+            if (!changePasswordResult.Succeeded)
+            {
+                // Password change failed, handle the errors appropriately
+                var errorMessage = string.Join(", ", changePasswordResult.Errors.Select(error => error.Description));
+                return new GeneralResponse(false, errorMessage);
+            }
+
+            // Password change successful
+            return new GeneralResponse(true, "Password changed successfully");
+        }
+
+        public async Task<UserProfileDTO> GetProfile(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                // User not found
+                return null;
+            }
+
+            // Map the user properties to a DTO or create a UserProfileDTO class
+            var userProfile = new UserProfileDTO
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+                Email = user.Email,
+                // Add other properties as needed
+            };
+
+            return userProfile;
         }
     }
 }
