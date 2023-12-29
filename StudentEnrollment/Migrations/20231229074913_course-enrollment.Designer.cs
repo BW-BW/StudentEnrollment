@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentEnrollment.Data;
 
@@ -11,9 +12,11 @@ using StudentEnrollment.Data;
 namespace StudentEnrollment.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231229074913_course-enrollment")]
+    partial class courseenrollment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,42 +180,29 @@ namespace StudentEnrollment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseModel");
+                    b.ToTable("CourseModels");
                 });
 
             modelBuilder.Entity("StudentEnrollment.Data.EnrollmentModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CourseModelId")
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("CourseId", "StudentId");
 
-                    b.Property<string>("UserModelId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.HasIndex("StudentId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseModelId");
-
-                    b.HasIndex("UserModelId");
-
-                    b.ToTable("EnrollmentModel");
+                    b.ToTable("EnrollmentModels");
                 });
 
             modelBuilder.Entity("StudentEnrollment.Data.UserModel", b =>
@@ -347,13 +337,13 @@ namespace StudentEnrollment.Migrations
                 {
                     b.HasOne("StudentEnrollment.Data.CourseModel", "CourseModel")
                         .WithMany("EnrollmentModels")
-                        .HasForeignKey("CourseModelId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudentEnrollment.Data.UserModel", "UserModel")
                         .WithMany("EnrollmentModels")
-                        .HasForeignKey("UserModelId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

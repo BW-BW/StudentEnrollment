@@ -10,5 +10,6 @@ namespace StudentEnrollment.Data
 
         public string Address { get; set; } = string.Empty;
 
+        public ICollection<EnrollmentModel> EnrollmentModels { get; set; }
     }
 }
