@@ -19,7 +19,7 @@ namespace StudentEnrollment.Data
 
 
             modelBuilder.Entity<EnrollmentModel>()
-                .HasKey(cs => new { cs.CourseId, cs.StudentId });
+                .HasKey(em => new { em.Id });
 
             modelBuilder.Entity<EnrollmentModel>()
                 .HasOne(cs => cs.CourseModel)

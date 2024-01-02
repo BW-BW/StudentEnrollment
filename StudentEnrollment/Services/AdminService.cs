@@ -153,5 +153,108 @@ namespace StudentEnrollment.Services
 
             return new DeleteResponse(true, "This user below is now deleted", userDto); ;
         }
+
+        public async Task<GeneralResponse> AddCourse(CourseDTO courseDTO)
+        {
+            var course = new CourseModel
+            {
+                Name = courseDTO.Name,
+                Duration = courseDTO.Duration,
+                Price = courseDTO.Price,
+            };
+            _context.CourseModels.Add(course);
+
+            await _context.SaveChangesAsync();
+
+            return new GeneralResponse(true, "Course Created");
+        }
+
+        public async Task<List<CourseDTO>> GetAllCourse()
+        {
+            var courses = await _context.CourseModels.ToListAsync();
+
+            var courseDTOs = new List<CourseDTO>();
+            foreach (var course in courses)
+            {
+                var courseDTO = new CourseDTO
+                {
+                    Name = course.Name,
+                    Duration = course.Duration,
+                    Price = course.Price,
+                };
+
+                courseDTOs.Add(courseDTO);
+            }
+
+            return courseDTOs;
+        }
+
+        public async Task<CourseResponse> GetCourse(int id)
+        {
+            var course = await _context.CourseModels.FindAsync(id);
+
+            if (course == null)
+            {
+                var empty = new CourseDTO { };
+
+                return new CourseResponse(false, "Course not found", empty);
+            }
+
+            var courseDTO = new CourseDTO
+            {
+                Name = course.Name,
+                Duration = course.Duration,
+                Price = course.Price,
+            };
+
+            return new CourseResponse(true, "Course found", courseDTO);
+        }
+
+        public async Task<CourseResponse> UpdateCourse(CourseDTO courseDTO, int id)
+        {
+            var updatecourse = await _context.CourseModels.FindAsync(id);
+
+            if (updatecourse == null)
+            {
+                var empty = new CourseDTO { };
+
+                return new CourseResponse(false, "Course not found", empty);
+            }
+
+            updatecourse.Name = courseDTO.Name;
+            updatecourse.Duration = courseDTO.Duration;
+            updatecourse.Price = courseDTO.Price;
+
+            await _context.SaveChangesAsync();
+
+            var getTask = GetCourse(id);
+            var response = await getTask;
+            var updatedDTO = response.courseDTO;
+
+            return new CourseResponse(true, "Course updated", updatedDTO);
+        }
+
+        public async Task<CourseResponse> DeleteCourse(int id)
+        {
+            var deletecourse = await _context.CourseModels.FindAsync(id);
+            if (deletecourse == null)
+            {
+                var empty = new CourseDTO { };
+
+                return new CourseResponse(false, "Course not found", empty);
+            }
+
+            _context.CourseModels.Remove(deletecourse);
+            await _context.SaveChangesAsync();
+
+            var courseDTO = new CourseDTO
+            {
+                Name = deletecourse.Name,
+                Duration = deletecourse.Duration,
+                Price = deletecourse.Price,
+            };
+
+            return new CourseResponse(true, "Course not found", courseDTO); ;
+        }
     }
 }

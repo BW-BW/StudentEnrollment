@@ -1,5 +1,4 @@
-﻿using StudentEnrollment.Data;
-using static StudentEnrollment.Responses.ServiceResponses;
+﻿using static StudentEnrollment.Responses.ServiceResponses;
 using StudentEnrollment.DTOs;
 
 namespace StudentEnrollment.Interface
@@ -11,5 +10,11 @@ namespace StudentEnrollment.Interface
         Task<ReadResponse> GetAdmin(string id);
         Task<UpdateResponse> UpdateAdmin(UserProfileDTO userProfileDTO, string userId);
         Task<DeleteResponse> DeleteAdmin(string id);
+
+        Task<GeneralResponse> AddCourse(CourseDTO courseDTO);
+        Task<List<CourseDTO>> GetAllCourse();
+        Task<CourseResponse> GetCourse(int id);
+        Task<CourseResponse> UpdateCourse(CourseDTO courseDTO, int id);
+        Task<CourseResponse> DeleteCourse(int id);
     }
 }

@@ -177,7 +177,7 @@ namespace StudentEnrollment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseModel");
+                    b.ToTable("CourseModels");
                 });
 
             modelBuilder.Entity("StudentEnrollment.Data.EnrollmentModel", b =>
@@ -191,28 +191,21 @@ namespace StudentEnrollment.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CourseModelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserModelId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseModelId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("UserModelId");
+                    b.HasIndex("StudentId");
 
-                    b.ToTable("EnrollmentModel");
+                    b.ToTable("EnrollmentModels");
                 });
 
             modelBuilder.Entity("StudentEnrollment.Data.UserModel", b =>
@@ -347,13 +340,13 @@ namespace StudentEnrollment.Migrations
                 {
                     b.HasOne("StudentEnrollment.Data.CourseModel", "CourseModel")
                         .WithMany("EnrollmentModels")
-                        .HasForeignKey("CourseModelId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudentEnrollment.Data.UserModel", "UserModel")
                         .WithMany("EnrollmentModels")
-                        .HasForeignKey("UserModelId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

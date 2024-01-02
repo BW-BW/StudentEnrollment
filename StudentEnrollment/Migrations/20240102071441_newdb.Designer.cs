@@ -12,8 +12,8 @@ using StudentEnrollment.Data;
 namespace StudentEnrollment.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231228062906_Initial")]
-    partial class Initial
+    [Migration("20240102071441_newdb")]
+    partial class newdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,59 @@ namespace StudentEnrollment.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("StudentEnrollment.Data.CourseModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CourseModels");
+                });
+
+            modelBuilder.Entity("StudentEnrollment.Data.EnrollmentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("EnrollmentModels");
+                });
+
             modelBuilder.Entity("StudentEnrollment.Data.UserModel", b =>
                 {
                     b.Property<string>("Id")
@@ -284,6 +337,35 @@ namespace StudentEnrollment.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StudentEnrollment.Data.EnrollmentModel", b =>
+                {
+                    b.HasOne("StudentEnrollment.Data.CourseModel", "CourseModel")
+                        .WithMany("EnrollmentModels")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentEnrollment.Data.UserModel", "UserModel")
+                        .WithMany("EnrollmentModels")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseModel");
+
+                    b.Navigation("UserModel");
+                });
+
+            modelBuilder.Entity("StudentEnrollment.Data.CourseModel", b =>
+                {
+                    b.Navigation("EnrollmentModels");
+                });
+
+            modelBuilder.Entity("StudentEnrollment.Data.UserModel", b =>
+                {
+                    b.Navigation("EnrollmentModels");
                 });
 #pragma warning restore 612, 618
         }

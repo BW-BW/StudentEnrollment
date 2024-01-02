@@ -41,7 +41,7 @@ namespace StudentEnrollment.Controllers
             return Ok(response);
         }
 
-        [HttpPost("admin-update")]
+        [HttpPut("admin-update")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdmin(UserProfileDTO userProfileDTO)
         {
@@ -68,6 +68,46 @@ namespace StudentEnrollment.Controllers
         public async Task<ActionResult> DeleteAdmin(string id)
         {
             var deletedHero = await _adminService.DeleteAdmin(id);
+            return Ok(deletedHero);
+        }
+
+        [HttpPost("course-add")]
+        public async Task<IActionResult> AddCourse(CourseDTO courseDTO)
+        {
+            var response = await _adminService.AddCourse(courseDTO);
+            return Ok(response);
+        }
+
+        [HttpGet("course-get")]
+        public async Task<IActionResult> GetAllCourse()
+        {
+            var response = await _adminService.GetAllCourse();
+            return Ok(response);
+        }
+
+        [HttpGet("course-get/{id}")]
+        public async Task<ActionResult> GetCourse(int id)
+        {
+            var response = await _adminService.GetCourse(id);
+
+            return Ok(response);
+        }
+
+        [HttpPut("course-update")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateCourse(CourseDTO courseDTO, int id)
+        {
+            var updatedHero = await _adminService.UpdateCourse(courseDTO, id);
+            if (updatedHero == null)
+                return NotFound("Hero not found");
+
+            return Ok(updatedHero);
+        }
+
+        [HttpDelete("course-delete/{id}")]
+        public async Task<ActionResult> DeleteCourse(int id)
+        {
+            var deletedHero = await _adminService.DeleteCourse(id);
             return Ok(deletedHero);
         }
     }
