@@ -67,6 +67,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddScoped<IStudentService, StudentService>();
 
+builder.Services.AddScoped<IAdminService, AdminService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
