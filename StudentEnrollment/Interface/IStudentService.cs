@@ -1,4 +1,5 @@
-﻿using StudentEnrollment.DTOs;
+﻿using StudentEnrollment.Data;
+using StudentEnrollment.DTOs;
 using static StudentEnrollment.Responses.ServiceResponses;
 
 namespace StudentEnrollment.Interface
@@ -8,5 +9,10 @@ namespace StudentEnrollment.Interface
         Task<UserProfileDTO> GetProfile(string userId);
 
         Task<UpdateResponse> UpdateProfile(UserProfileDTO userProfileDTO, string userId);
+
+        Task<List<CourseModel>> GetAllCourse();
+        Task<GeneralResponse> Enroll(string userId, int courseId);
+        Task<List<EnrollmentModel>> GetMyEnrollment(string userId);
+        Task<GeneralResponse> WithdrawEnrollment(string userId, int courseId);
     }
 }
