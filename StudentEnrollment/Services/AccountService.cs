@@ -56,7 +56,7 @@ namespace StudentEnrollment.Services
             }
         }
 
-        public async Task<LoginResponse> LoginAccount(UserModelDTO loginDTO)
+        public async Task<LoginResponse> LoginAccount(LoginDTO loginDTO)
         {
             if (loginDTO == null)
                 return new LoginResponse(false, null!, "Login container is empty");

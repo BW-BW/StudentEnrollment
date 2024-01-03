@@ -27,7 +27,7 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserModelDTO loginDTO)
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var response = await _accountService.LoginAccount(loginDTO);
             return Ok(response);

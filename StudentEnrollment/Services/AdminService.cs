@@ -256,5 +256,97 @@ namespace StudentEnrollment.Services
 
             return new CourseResponse(true, "Course not found", courseDTO); ;
         }
+
+        public async Task<List<StudentEnrollmentDTO>> GetAllEnrollment(bool pending)
+        {
+            var myEnrollment = await _context.EnrollmentModels
+                .Include(em => em.CourseModel) // navigation property "CourseModel" is defined
+                .Include(em => em.UserModel)   // navigation property "UserModel" is defined
+                .ToListAsync();
+
+            var myEnrollmentPending = await _context.EnrollmentModels
+                .Include(em => em.CourseModel) // navigation property "CourseModel" is defined
+                .Include(em => em.UserModel)   // navigation property "UserModel" is defined
+                .Where(em => em.Status == "Pending")
+                .ToListAsync();
+
+            var enrollmentList = new List<StudentEnrollmentDTO>();
+
+            if (pending)
+            {
+                foreach (var enrollment in myEnrollmentPending)
+                {
+                    var StudentEnrollmentDTO = new StudentEnrollmentDTO
+                    {
+                        FirstName = enrollment.UserModel.FirstName,
+                        LastName = enrollment.UserModel.LastName,
+                        CourseId = enrollment.CourseId,
+                        CourseName = enrollment.CourseModel.Name,
+                        Status = enrollment.Status,
+                        Duration = enrollment.CourseModel.Duration,
+                        Price = enrollment.CourseModel.Price,
+                    };
+
+                    enrollmentList.Add(StudentEnrollmentDTO);
+                }
+
+                return enrollmentList;
+            }
+
+            foreach (var enrollment in myEnrollment)
+            {
+                var StudentEnrollmentDTO = new StudentEnrollmentDTO
+                {
+                    FirstName = enrollment.UserModel.FirstName,
+                    LastName = enrollment.UserModel.LastName,
+                    CourseId = enrollment.CourseId,
+                    CourseName = enrollment.CourseModel.Name,
+                    Status = enrollment.Status,
+                    Duration = enrollment.CourseModel.Duration,
+                    Price = enrollment.CourseModel.Price,
+                };
+
+                enrollmentList.Add(StudentEnrollmentDTO);
+            }
+
+            return enrollmentList;
+        }
+
+        public async Task<GeneralResponse> ApproveRejectEnrollment(int enrollmentId, bool decision)
+        {
+            var theEnrollment = await _context.EnrollmentModels.FindAsync(enrollmentId);
+            if (theEnrollment == null)
+            {
+                return new GeneralResponse(false, "Enrollment Not Found");
+            }
+
+            if (theEnrollment.Status != "Pending")
+            {
+                return new GeneralResponse(false, "Cannot Approve or Reject this one");
+            }
+
+            //check if the enrollment is pending
+            /*var checkEnrollment = await _context.EnrollmentModels
+                .Where(em => em.Status == "Pending" && em.CourseId == courseId && em.StudentId == userId)
+                .FirstOrDefaultAsync();
+            if (checkEnrollment == null)
+            {
+                return new GeneralResponse(false, "Cannot Approve or Reject this one");
+            }*/
+
+            if (decision == true)
+            {
+                theEnrollment.Status = "Active";
+
+                await _context.SaveChangesAsync();
+                return new GeneralResponse(true, "Successfully Approved");
+            } else
+            {
+                theEnrollment.Status = "Rejected";
+
+                await _context.SaveChangesAsync();
+                return new GeneralResponse(true, "Successfully Rejected");
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using StudentEnrollment.DTOs;
 using StudentEnrollment.Interface;
 using StudentEnrollment.Services;
 using System.Security.Claims;
+using static StudentEnrollment.Responses.ServiceResponses;
 
 namespace StudentEnrollment.Controllers
 {
@@ -67,8 +68,8 @@ namespace StudentEnrollment.Controllers
         [HttpDelete("admin-delete/{id}")]
         public async Task<ActionResult> DeleteAdmin(string id)
         {
-            var deletedHero = await _adminService.DeleteAdmin(id);
-            return Ok(deletedHero);
+            var deletedAdmin = await _adminService.DeleteAdmin(id);
+            return Ok(deletedAdmin);
         }
 
         [HttpPost("course-add")]
@@ -97,18 +98,32 @@ namespace StudentEnrollment.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCourse(CourseDTO courseDTO, int id)
         {
-            var updatedHero = await _adminService.UpdateCourse(courseDTO, id);
-            if (updatedHero == null)
+            var updatedCourse = await _adminService.UpdateCourse(courseDTO, id);
+            if (updatedCourse == null)
                 return NotFound("Hero not found");
 
-            return Ok(updatedHero);
+            return Ok(updatedCourse);
         }
 
         [HttpDelete("course-delete/{id}")]
         public async Task<ActionResult> DeleteCourse(int id)
         {
-            var deletedHero = await _adminService.DeleteCourse(id);
-            return Ok(deletedHero);
+            var deletedCourse = await _adminService.DeleteCourse(id);
+            return Ok(deletedCourse);
+        }
+
+        [HttpGet("enrollment-get")]
+        public async Task<ActionResult> GetAllEnrollment(bool pending)
+        {
+            var allEnrollment = await _adminService.GetAllEnrollment(pending);
+            return Ok(allEnrollment);
+        }
+
+        [HttpPost("enrollment-approve-reject")]
+        public async Task<ActionResult> ApproveRejectEnrollment(int enrollmentId, bool decision)
+        {
+            var result = await _adminService.ApproveRejectEnrollment(enrollmentId, decision);
+            return Ok(result);
         }
     }
 }

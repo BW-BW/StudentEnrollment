@@ -104,13 +104,32 @@ namespace StudentEnrollment.Services
             return new GeneralResponse(true, "Successfully Enrolled");
         }
 
-        public async Task<List<EnrollmentModel>> GetMyEnrollment(string userId)
+        public async Task<List<StudentEnrollmentDTO>> GetMyEnrollment(string userId)
         {
             var myEnrollment = await _context.EnrollmentModels
+                .Include(em => em.CourseModel) // navigation property "CourseModel" is defined
+                .Include(em => em.UserModel)   // navigation property "UserModel" is defined
                 .Where(em => em.StudentId == userId)
                 .ToListAsync();
 
-            return myEnrollment;
+            var enrollmentList = new List<StudentEnrollmentDTO>();
+            foreach (var enrollment in myEnrollment)
+            {
+                var StudentEnrollmentDTO = new StudentEnrollmentDTO
+                {
+                    FirstName = enrollment.UserModel.FirstName,
+                    LastName = enrollment.UserModel.LastName,
+                    CourseId = enrollment.CourseId,
+                    CourseName = enrollment.CourseModel.Name,
+                    Status = enrollment.Status,
+                    Duration = enrollment.CourseModel.Duration,
+                    Price = enrollment.CourseModel.Price,
+                };
+
+                enrollmentList.Add(StudentEnrollmentDTO);
+            }
+
+            return enrollmentList;
         }
 
         public async Task<GeneralResponse> WithdrawEnrollment(string userId, int courseId)

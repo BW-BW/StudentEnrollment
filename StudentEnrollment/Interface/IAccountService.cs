@@ -7,7 +7,7 @@ namespace StudentEnrollment.Interface
     {
         Task<GeneralResponse> CreateAccount(UserModelDTO userModelDTO);
 
-        Task<LoginResponse> LoginAccount(UserModelDTO userModelDTO);
+        Task<LoginResponse> LoginAccount(LoginDTO loginDTO);
 
         Task<GeneralResponse> ChangePassword(UserModelDTO userModelDTO, string newPassword);
 

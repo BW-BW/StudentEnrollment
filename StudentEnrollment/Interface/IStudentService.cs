@@ -12,7 +12,7 @@ namespace StudentEnrollment.Interface
 
         Task<List<CourseModel>> GetAllCourse();
         Task<GeneralResponse> Enroll(string userId, int courseId);
-        Task<List<EnrollmentModel>> GetMyEnrollment(string userId);
+        Task<List<StudentEnrollmentDTO>> GetMyEnrollment(string userId);
         Task<GeneralResponse> WithdrawEnrollment(string userId, int courseId);
     }
 }

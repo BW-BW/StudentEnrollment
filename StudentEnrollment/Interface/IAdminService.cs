@@ -16,5 +16,7 @@ namespace StudentEnrollment.Interface
         Task<CourseResponse> GetCourse(int id);
         Task<CourseResponse> UpdateCourse(CourseDTO courseDTO, int id);
         Task<CourseResponse> DeleteCourse(int id);
+        Task<List<StudentEnrollmentDTO>> GetAllEnrollment(bool pending);
+        Task<GeneralResponse> ApproveRejectEnrollment(int enrollmentId, bool decision);
     }
 }
