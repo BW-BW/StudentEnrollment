@@ -116,7 +116,8 @@ namespace StudentEnrollment.Services
             foreach (var enrollment in myEnrollment)
             {
                 var StudentEnrollmentDTO = new StudentEnrollmentDTO
-                {
+                {   
+                    Id = enrollment.Id,
                     FirstName = enrollment.UserModel.FirstName,
                     LastName = enrollment.UserModel.LastName,
                     CourseId = enrollment.CourseId,

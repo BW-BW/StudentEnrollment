@@ -34,18 +34,10 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword(UserModelDTO userModelDTO, string newPassword)
-        {
-            var response = await _accountService.ChangePassword(userModelDTO, newPassword);
-            return Ok(response);
-        }
-
-        [HttpGet("profile")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetProfile()
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (string.IsNullOrEmpty(userId))
             {
                 // User not authenticated
@@ -54,13 +46,9 @@ namespace StudentEnrollment.Controllers
 
             var userProfile = await _accountService.GetProfile(userId);
 
-            if (userProfile == null)
-            {
-                // User not found
-                return NotFound();
-            }
 
-            return Ok(userProfile);
+            var response = await _accountService.ChangePassword(userProfile.Email, oldPassword, newPassword);
+            return Ok(response);
         }
     }
 }

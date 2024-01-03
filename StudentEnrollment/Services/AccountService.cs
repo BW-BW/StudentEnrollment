@@ -37,23 +37,12 @@ namespace StudentEnrollment.Services
             if (!createUser.Succeeded) 
                 return new GeneralResponse(false, "Error occured.. please try again");
 
-            //Assign Default Role : Admin to first registrar; rest is user
-            var checkAdmin = await roleManager.FindByNameAsync("Admin");
-            if (checkAdmin is null)
-            {
-                await roleManager.CreateAsync(new IdentityRole() { Name = "Admin" });
-                await userManager.AddToRoleAsync(newUser, "Admin");
-                return new GeneralResponse(true, "Account Created");
-            }
-            else
-            {
-                var checkUser = await roleManager.FindByNameAsync("User");
-                if (checkUser is null)
-                    await roleManager.CreateAsync(new IdentityRole() { Name = "User" });
+            var checkUser = await roleManager.FindByNameAsync("User");
+            if (checkUser is null)
+                await roleManager.CreateAsync(new IdentityRole() { Name = "User" });
 
-                await userManager.AddToRoleAsync(newUser, "User");
-                return new GeneralResponse(true, "Account Created");
-            }
+            await userManager.AddToRoleAsync(newUser, "User");
+            return new GeneralResponse(true, "Account Created");
         }
 
         public async Task<LoginResponse> LoginAccount(LoginDTO loginDTO)
@@ -97,14 +86,9 @@ namespace StudentEnrollment.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<GeneralResponse> ChangePassword(UserModelDTO userModelDTO, string newPassword)
+        public async Task<GeneralResponse> ChangePassword(string email, string oldpassword, string newPassword)
         {
-            if (userModelDTO == null || string.IsNullOrWhiteSpace(newPassword))
-            {
-                return new GeneralResponse(false, "Invalid input parameters");
-            }
-
-            var user = await userManager.FindByEmailAsync(userModelDTO.Email);
+            var user = await userManager.FindByEmailAsync(email);
 
             if (user == null)
             {
@@ -112,7 +96,7 @@ namespace StudentEnrollment.Services
             }
 
             // Use userManager.ChangePasswordAsync to change the password
-            var changePasswordResult = await userManager.ChangePasswordAsync(user, userModelDTO.Password, newPassword);
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, oldpassword, newPassword);
 
             if (!changePasswordResult.Succeeded)
             {

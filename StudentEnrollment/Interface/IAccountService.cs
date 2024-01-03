@@ -9,7 +9,7 @@ namespace StudentEnrollment.Interface
 
         Task<LoginResponse> LoginAccount(LoginDTO loginDTO);
 
-        Task<GeneralResponse> ChangePassword(UserModelDTO userModelDTO, string newPassword);
+        Task<GeneralResponse> ChangePassword(string email, string oldPassword, string newPassword);
 
         Task<UserProfileDTO> GetProfile(string userId);
     }

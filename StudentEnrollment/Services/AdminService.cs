@@ -278,6 +278,7 @@ namespace StudentEnrollment.Services
                 {
                     var StudentEnrollmentDTO = new StudentEnrollmentDTO
                     {
+                        Id = enrollment.Id,
                         FirstName = enrollment.UserModel.FirstName,
                         LastName = enrollment.UserModel.LastName,
                         CourseId = enrollment.CourseId,
@@ -297,6 +298,7 @@ namespace StudentEnrollment.Services
             {
                 var StudentEnrollmentDTO = new StudentEnrollmentDTO
                 {
+                    Id= enrollment.Id,
                     FirstName = enrollment.UserModel.FirstName,
                     LastName = enrollment.UserModel.LastName,
                     CourseId = enrollment.CourseId,
@@ -324,15 +326,6 @@ namespace StudentEnrollment.Services
             {
                 return new GeneralResponse(false, "Cannot Approve or Reject this one");
             }
-
-            //check if the enrollment is pending
-            /*var checkEnrollment = await _context.EnrollmentModels
-                .Where(em => em.Status == "Pending" && em.CourseId == courseId && em.StudentId == userId)
-                .FirstOrDefaultAsync();
-            if (checkEnrollment == null)
-            {
-                return new GeneralResponse(false, "Cannot Approve or Reject this one");
-            }*/
 
             if (decision == true)
             {

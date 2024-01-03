@@ -11,6 +11,7 @@ namespace StudentEnrollment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -43,7 +44,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPut("admin-update")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdmin(UserProfileDTO userProfileDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -95,7 +95,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPut("course-update")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCourse(CourseDTO courseDTO, int id)
         {
             var updatedCourse = await _adminService.UpdateCourse(courseDTO, id);

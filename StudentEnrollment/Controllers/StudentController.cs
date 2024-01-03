@@ -10,6 +10,7 @@ namespace StudentEnrollment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -20,7 +21,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpGet("profile")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetProfile()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -43,7 +43,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPost("update-profile")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateProfile(UserProfileDTO userProfileDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -73,7 +72,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPost("enroll")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> Enroll(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -90,7 +88,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpGet("myenrollment-get")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetMyEnrollment()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -105,7 +102,6 @@ namespace StudentEnrollment.Controllers
         }
 
         [HttpPost("withdraw")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> WithdrawEnrollment(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
