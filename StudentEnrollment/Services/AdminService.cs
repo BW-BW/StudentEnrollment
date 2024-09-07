@@ -21,7 +21,7 @@ namespace StudentEnrollment.Services
             this._roleManager = roleManager;
         }
 
-        public async Task<GeneralResponse> CreateAdmin(UserModelDTO userModelDTO)
+        public async Task<GeneralResponse> CreateAdminAsync(UserModelDTO userModelDTO)
         {
             if (userModelDTO is null)
                 return new GeneralResponse(false, "Model is empty");

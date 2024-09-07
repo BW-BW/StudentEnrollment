@@ -5,7 +5,7 @@ namespace StudentEnrollment.Interface
 {
     public interface IAdminService
     {
-        Task<GeneralResponse> CreateAdmin(UserModelDTO userModelDTO);
+        Task<GeneralResponse> CreateAdminAsync(UserModelDTO userModelDTO);
         Task<List<UserProfileDTO>> GetAllAdmin();
         Task<ReadResponse> GetAdmin(string id);
         Task<UpdateResponse> UpdateAdmin(UserProfileDTO userProfileDTO, string userId);

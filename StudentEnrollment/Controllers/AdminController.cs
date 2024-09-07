@@ -24,7 +24,7 @@ namespace StudentEnrollment.Controllers
         [HttpPost("admin-register")]
         public async Task<IActionResult> CreateAdmin(UserModelDTO userDTO)
         {
-            var response = await _adminService.CreateAdmin(userDTO);
+            var response = await _adminService.CreateAdminAsync(userDTO);
             return Ok(response);
         }
 
